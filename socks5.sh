@@ -22,7 +22,8 @@ sudo bash -c 'cat <<EOF > /etc/danted.conf
 logoutput: /var/log/danted.log
 internal: 10.0.10.1 port = $port
 external: eth0
-method: username
+# method: username
+method: none
 user.privileged: root
 user.notprivileged: nobody
 client pass {
