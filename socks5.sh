@@ -18,7 +18,7 @@ sudo touch /var/log/danted.log
 sudo chown nobody:nogroup /var/log/danted.log
 
 # Create the configuration file
-sudo bash -c 'cat <<EOF > /etc/danted.conf
+sudo -E bash -c 'cat <<EOF > /etc/danted.conf
 logoutput: /var/log/danted.log
 internal: 10.0.10.1 port = $port
 external: eth0
