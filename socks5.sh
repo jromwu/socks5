@@ -4,6 +4,8 @@ echo -e "Please enter the username for the socks5 proxy:"
 read username
 echo -e "Please enter the password for the socks5 proxy:"
 read -s password
+echo -e "Please enter internal server port:"
+read -s port
 
 # Update repositories
 sudo apt update -y
@@ -18,7 +20,7 @@ sudo chown nobody:nogroup /var/log/danted.log
 # Create the configuration file
 sudo bash -c 'cat <<EOF > /etc/danted.conf
 logoutput: /var/log/danted.log
-internal: 0.0.0.0 port = 1080
+internal: 10.0.10.1 port = $port
 external: eth0
 method: username
 user.privileged: root
@@ -37,16 +39,16 @@ EOF'
 sudo useradd --shell /usr/sbin/nologin $username
 echo "$username:$password" | sudo chpasswd
 
-# Check if UFW is active and open port 1080 if needed
+# Check if UFW is active and open port $port if needed
 if sudo ufw status | grep -q "Status: active"; then
-    sudo ufw allow 1080/tcp
+    sudo ufw allow $port/tcp
 fi
 
-# Check if iptables is active and open port 1080 if needed
-if sudo iptables -L | grep -q "ACCEPT     tcp  --  anywhere             anywhere             tcp dpt:1080"; then
-    echo "Port 1080 is already open in iptables."
+# Check if iptables is active and open port $port if needed
+if sudo iptables -L | grep -q "ACCEPT     tcp  --  anywhere             anywhere             tcp dpt:$port"; then
+    echo "Port $port is already open in iptables."
 else
-    sudo iptables -A INPUT -p tcp --dport 1080 -j ACCEPT
+    sudo iptables -A INPUT -p tcp --dport $port -j ACCEPT
 fi
 
 # Edit the systemd service file for danted with sed
