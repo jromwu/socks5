@@ -5,7 +5,7 @@ read username
 echo -e "Please enter the password for the socks5 proxy:"
 read -s password
 echo -e "Please enter internal server port:"
-read -s port
+read port
 
 # Update repositories
 sudo apt update -y
